@@ -23,5 +23,8 @@ export function buscarJuegos({ texto = "", page_size = 12 } = {}) {
     return request("/games", { search: texto, page_size });
 }
 export function obtenerDetalleJuego(id) {
-  return request(`/games/${id}`);
+    return request(`/games/${id}`);
+}
+export function obtenerJuegosPopulares({ page_size = 12 } = {}) {
+    return request("/games", { ordering: "-rating", page_size });
 }

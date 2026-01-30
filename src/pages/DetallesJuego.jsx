@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { obtenerDetalleJuego } from "../services/rawg";
+import { esFavorito, alternarFavorito } from "../services/favoritos";
+
 
 export default function DetalleJuego() {
     const { id } = useParams();
@@ -8,6 +10,8 @@ export default function DetalleJuego() {
     const [juego, setJuego] = useState(null);
     const [cargando, setCargando] = useState(false);
     const [error, setError] = useState("");
+    const [favorito, setFavorito] = useState(false);
+
 
     useEffect(() => {
         let vivo = true;
@@ -19,6 +23,7 @@ export default function DetalleJuego() {
                 const data = await obtenerDetalleJuego(id);
                 if (!vivo) return;
                 setJuego(data);
+                setFavorito(esFavorito(id));
             } catch (e) {
                 if (!vivo) return;
                 setError(e.message);
@@ -33,21 +38,42 @@ export default function DetalleJuego() {
         };
     }, [id]);
 
+    function onToggleFavorito() {
+        alternarFavorito(id);
+        setFavorito(esFavorito(id));
+    }
+
+
     if (cargando) return <p className="text-slate-300">Cargando detalle...</p>;
     if (error) return <p className="text-red-300">{error}</p>;
     if (!juego) return null;
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <h1 className="text-2xl font-extrabold">{juego.name}</h1>
-                <Link
-                    to="/juegos"
-                    className="rounded-2xl border border-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-900/40"
-                >
-                    Volver
-                </Link>
+
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        onClick={onToggleFavorito}
+                        className={
+                            favorito
+                                ? "rounded-2xl bg-yellow-300 px-4 py-2 text-sm font-semibold text-slate-900 hover:opacity-90"
+                                : "rounded-2xl border border-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-900/40"
+                        }
+                    >
+                        {favorito ? "En favoritos" : "Añadir a favoritos"}
+                    </button>
+
+                    <Link
+                        to="/juegos"
+                        className="rounded-2xl border border-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-900/40"
+                    >
+                        Volver
+                    </Link>
+                </div>
             </div>
+
 
             {juego.background_image ? (
                 <img
@@ -60,13 +86,13 @@ export default function DetalleJuego() {
 
             <div className="flex flex-wrap gap-3 text-sm text-slate-300">
                 <span className="rounded-full border border-slate-800 bg-slate-900/30 px-3 py-1">
-                    ⭐ Rating: {juego.rating ?? "N/A"}
+                    Rating: {juego.rating ?? "N/A"}
                 </span>
                 <span className="rounded-full border border-slate-800 bg-slate-900/30 px-3 py-1">
-                    📅 Lanzamiento: {juego.released ?? "N/A"}
+                    Lanzamiento: {juego.released ?? "N/A"}
                 </span>
                 <span className="rounded-full border border-slate-800 bg-slate-900/30 px-3 py-1">
-                    🏆 Metacritic: {juego.metacritic ?? "N/A"}
+                    Metacritic: {juego.metacritic ?? "N/A"}
                 </span>
             </div>
 
