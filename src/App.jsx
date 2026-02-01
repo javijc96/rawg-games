@@ -20,7 +20,6 @@ export default function App() {
           <Route path="/juegos/:id" element={<DetallesJuego />} />
           <Route path="/favoritos" element={<Favoritos />} />
           <Route path="*" element={<NoEncontrado />} />
-
         </Routes>
       </main>
 
