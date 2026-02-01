@@ -51,7 +51,7 @@ export default function Juegos() {
     return (
         <div className="space-y-6">
             <header className="space-y-3">
-                <h1 className="text-4xl font-extrabold bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">🕹️ Buscador de Juegos</h1>
+                <h1 className="text-4xl font-extrabold bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">Buscador de Juegos</h1>
                 <p className="text-base text-slate-300">Busca tus juegos favoritos por nombre y descubre nuevos títulos.</p>
             </header>
 
