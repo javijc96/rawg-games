@@ -10,17 +10,19 @@ import Footer from "./components/Footer";
 
 export default function App() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Header />
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/juegos" element={<Juegos />} />
-          <Route path="/juegos/:id" element={<DetallesJuego />} />
-          <Route path="/favoritos" element={<Favoritos />} />
-          <Route path="*" element={<NoEncontrado />} />
-        </Routes>
+      <main className="flex-1 w-full">
+        <div className="mx-auto w-full max-w-6xl px-4 py-8">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/juegos" element={<Juegos />} />
+            <Route path="/juegos/:id" element={<DetallesJuego />} />
+            <Route path="/favoritos" element={<Favoritos />} />
+            <Route path="*" element={<NoEncontrado />} />
+          </Routes>
+        </div>
       </main>
 
       <Footer />
