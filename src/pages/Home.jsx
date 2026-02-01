@@ -45,6 +45,9 @@ export default function Home() {
                             Usa el buscador para encontrar el juego que tengas en mente y veras toda la informacion que necesitas.
                         </p>
                     </div>
+<div className="p-6 text-5xl font-extrabold text-red-500">
+  TAILWIND EN VERCEL
+</div>
 
                     <Link
                         to="/juegos"
