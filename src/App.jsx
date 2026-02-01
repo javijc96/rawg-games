@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Juegos from "./pages/juegos";
-import DetalleJuego from "./pages/DetallesJuego";
+import Juegos from "./pages/Juegos";
+import DetallesJuego from "./pages/DetallesJuego";
 import Favoritos from "./pages/Favoritos";
 import NoEncontrado from "./pages/NoEncontrado";
 
@@ -17,7 +17,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/juegos" element={<Juegos />} />
-          <Route path="/juegos/:id" element={<DetalleJuego />} />
+          <Route path="/juegos/:id" element={<DetallesJuego />} />
           <Route path="/favoritos" element={<Favoritos />} />
           <Route path="*" element={<NoEncontrado />} />
 
