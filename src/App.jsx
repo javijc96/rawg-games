@@ -2,16 +2,29 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Juegos from "./pages/juegos";
 import DetalleJuego from "./pages/DetallesJuego";
+import Favoritos from "./pages/Favoritos";
+import NoEncontrado from "./pages/NoEncontrado";
+
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export default function App() {
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/juegos" element={<Juegos />} />
-        <Route path="/Juegos/:id" element={<DetalleJuego />} />
+    <div className="min-h-screen">
+      <Header />
 
-      </Routes>
-    </main>
+      <main className="mx-auto max-w-6xl px-4 py-8">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/juegos" element={<Juegos />} />
+          <Route path="/juegos/:id" element={<DetalleJuego />} />
+          <Route path="/favoritos" element={<Favoritos />} />
+          <Route path="*" element={<NoEncontrado />} />
+
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

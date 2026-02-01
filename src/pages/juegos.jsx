@@ -50,28 +50,35 @@ export default function Juegos() {
 
     return (
         <div className="space-y-6">
-            <header className="space-y-2">
-                <h1 className="text-2xl font-extrabold">Juegos</h1>
-                <p className="text-sm text-slate-400">Busca un juego por nombre.</p>
+            <header className="space-y-3">
+                <h1 className="text-4xl font-extrabold bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">🕹️ Buscador de Juegos</h1>
+                <p className="text-base text-slate-300">Busca tus juegos favoritos por nombre y descubre nuevos títulos.</p>
             </header>
 
-            <form onSubmit={onSubmit} className="flex gap-2">
+            <form onSubmit={onSubmit} className="flex gap-3 flex-col sm:flex-row">
                 <input
                     value={texto}
                     onChange={(e) => setTexto(e.target.value)}
-                    placeholder="Ej: Zelda, Mario..."
-                    className="w-full rounded-2xl border border-slate-800 bg-slate-900/40 px-4 py-3 text-sm outline-none placeholder:text-slate-500 focus:border-slate-600"
+                    placeholder="Zelda, Pokemon, Elden Ring..."
+                    className="flex-1 rounded-xl border-2 border-primary-600/40 bg-slate-800/50 px-5 py-3 text-base outline-none placeholder:text-slate-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition"
                 />
                 <button
                     type="submit"
-                    className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:opacity-90"
+                    className="rounded-xl bg-gradient-button px-8 py-3 text-base font-bold text-white hover:shadow-lg hover:shadow-primary-500/50 transition duration-300 hover:scale-105 transform shadow-lg whitespace-nowrap"
                 >
                     Buscar
                 </button>
             </form>
 
-            {cargando ? <p className="text-slate-300">Cargando...</p> : null}
-            {error ? <p className="text-red-300">{error}</p> : null}
+            {cargando ? <p className="text-center text-primary-400 font-semibold text-lg">Buscando juegos...</p> : null}
+            {error ? <p className="text-center text-red-400 font-semibold text-lg">{error}</p> : null}
+            
+            {!cargando && !error && juegos.length === 0 && texto ? (
+                <div className="rounded-2xl border-2 border-primary-600/30 bg-gradient-to-r from-slate-800/50 to-teal-900/30 p-8 text-center">
+                    <p className="text-slate-300 text-lg">No se encontraron juegos para "{texto}"</p>
+                </div>
+            ) : null}
+
             <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {juegos.map((j) => (
                     <TarjetaJuego key={j.id} juego={j} />

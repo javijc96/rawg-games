@@ -44,22 +44,22 @@ export default function DetalleJuego() {
     }
 
 
-    if (cargando) return <p className="text-slate-300">Cargando detalle...</p>;
-    if (error) return <p className="text-red-300">{error}</p>;
+    if (cargando) return <p className="text-center text-primary-400 font-semibold text-lg">Cargando detalle...</p>;
+    if (error) return <p className="text-center text-red-400 font-semibold text-lg">{error}</p>;
     if (!juego) return null;
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <h1 className="text-2xl font-extrabold">{juego.name}</h1>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-gradient-to-r from-slate-800/50 via-teal-900/30 to-slate-800/50 backdrop-blur rounded-2xl p-6 border border-primary-600/30">
+                <h1 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">{juego.name}</h1>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                     <button
                         onClick={onToggleFavorito}
                         className={
                             favorito
-                                ? "rounded-2xl bg-yellow-300 px-4 py-2 text-sm font-semibold text-slate-900 hover:opacity-90"
-                                : "rounded-2xl border border-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-900/40"
+                                ? "rounded-xl bg-gradient-button px-6 py-2 text-base font-bold text-white hover:shadow-lg hover:shadow-primary-500/50 transition duration-300 shadow-lg transform hover:scale-105"
+                                : "rounded-xl border-2 border-primary-600 px-6 py-2 text-base font-bold text-primary-400 hover:bg-primary-600/20 transition duration-300 hover:scale-105 transform"
                         }
                     >
                         {favorito ? "En favoritos" : "Añadir a favoritos"}
@@ -67,9 +67,9 @@ export default function DetalleJuego() {
 
                     <Link
                         to="/juegos"
-                        className="rounded-2xl border border-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-900/40"
+                        className="rounded-xl border-2 border-slate-600 px-6 py-2 text-base font-bold hover:bg-slate-700/50 transition duration-300 hover:scale-105 transform"
                     >
-                        Volver
+                        ← Volver
                     </Link>
                 </div>
             </div>
@@ -79,34 +79,34 @@ export default function DetalleJuego() {
                 <img
                     src={juego.background_image}
                     alt={juego.name}
-                    className="w-full rounded-3xl border border-slate-800 object-cover"
+                    className="w-full rounded-3xl border-2 border-primary-600/40 object-cover shadow-2xl shadow-primary-500/30"
                     style={{ maxHeight: 420 }}
                 />
             ) : null}
 
-            <div className="flex flex-wrap gap-3 text-sm text-slate-300">
-                <span className="rounded-full border border-slate-800 bg-slate-900/30 px-3 py-1">
+            <div className="flex flex-wrap gap-3 text-sm">
+                <span className="rounded-full border border-primary-600/50 bg-gradient-to-r from-primary-600/20 to-teal-600/20 px-4 py-2 font-semibold text-primary-300">
                     Rating: {juego.rating ?? "N/A"}
                 </span>
-                <span className="rounded-full border border-slate-800 bg-slate-900/30 px-3 py-1">
+                <span className="rounded-full border border-blue-600/50 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 px-4 py-2 font-semibold text-blue-300">
                     Lanzamiento: {juego.released ?? "N/A"}
                 </span>
-                <span className="rounded-full border border-slate-800 bg-slate-900/30 px-3 py-1">
+                <span className="rounded-full border border-purple-600/50 bg-gradient-to-r from-purple-600/20 to-pink-600/20 px-4 py-2 font-semibold text-purple-300">
                     Metacritic: {juego.metacritic ?? "N/A"}
                 </span>
             </div>
 
             <section className="grid gap-4 md:grid-cols-2">
-                <div className="rounded-3xl border border-slate-800 bg-slate-900/30 p-5">
-                    <h2 className="text-lg font-bold">Géneros</h2>
-                    <p className="mt-2 text-slate-300">
+                <div className="rounded-2xl border border-primary-600/40 bg-gradient-to-br from-slate-800/50 to-teal-900/30 backdrop-blur p-6 shadow-lg shadow-primary-500/10">
+                    <h2 className="text-xl font-bold text-primary-400">Géneros</h2>
+                    <p className="mt-3 text-slate-200 leading-relaxed">
                         {(juego.genres || []).map((g) => g.name).join(", ") || "N/A"}
                     </p>
                 </div>
 
-                <div className="rounded-3xl border border-slate-800 bg-slate-900/30 p-5">
-                    <h2 className="text-lg font-bold">Plataformas</h2>
-                    <p className="mt-2 text-slate-300">
+                <div className="rounded-2xl border border-primary-600/40 bg-gradient-to-br from-slate-800/50 to-teal-900/30 backdrop-blur p-6 shadow-lg shadow-primary-500/10">
+                    <h2 className="text-xl font-bold text-primary-400">Plataformas</h2>
+                    <p className="mt-3 text-slate-200 leading-relaxed">
                         {(juego.platforms || [])
                             .map((p) => p.platform?.name)
                             .filter(Boolean)
@@ -115,10 +115,10 @@ export default function DetalleJuego() {
                 </div>
             </section>
 
-            <section className="rounded-3xl border border-slate-800 bg-slate-900/30 p-5">
-                <h2 className="text-lg font-bold">Descripción</h2>
+            <section className="rounded-2xl border border-primary-600/40 bg-gradient-to-br from-slate-800/50 to-teal-900/30 backdrop-blur p-6 shadow-lg shadow-primary-500/10">
+                <h2 className="text-xl font-bold text-primary-400">Descripción</h2>
                 <div
-                    className="prose prose-invert mt-3 max-w-none"
+                    className="prose prose-invert mt-4 max-w-none text-slate-200 leading-relaxed"
                     dangerouslySetInnerHTML={{
                         __html: juego.description || "<p>No disponible</p>",
                     }}
