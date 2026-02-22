@@ -96,22 +96,71 @@ export default function DetalleJuego() {
                 </span>
             </div>
 
-            <section className="grid gap-4 md:grid-cols-2">
+            <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <div className="rounded-2xl border border-primary-600/40 bg-gradient-to-br from-slate-800/50 to-teal-900/30 backdrop-blur p-6 shadow-lg shadow-primary-500/10">
                     <h2 className="text-xl font-bold text-primary-400">Géneros</h2>
-                    <p className="mt-3 text-slate-200 leading-relaxed">
-                        {(juego.genres || []).map((g) => g.name).join(", ") || "N/A"}
-                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                        {(juego.genres || []).length > 0 ? (
+                            juego.genres.map((g) => (
+                                <Link
+                                    key={g.id}
+                                    to={`/juegos?genres=${g.id}`}
+                                    className="text-slate-200 hover:text-primary-400 transition"
+                                >
+                                    {g.name}
+                                </Link>
+                            )).reduce((prev, curr) => [prev, ", ", curr])
+                        ) : "N/A"}
+                    </div>
+                </div>
+
+                <div className="rounded-2xl border border-primary-600/40 bg-gradient-to-br from-slate-800/50 to-teal-900/30 backdrop-blur p-6 shadow-lg shadow-primary-500/10">
+                    <h2 className="text-xl font-bold text-primary-400">Distribuidoras (Publishers)</h2>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                        {(juego.publishers || []).length > 0 ? (
+                            juego.publishers.map((p) => (
+                                <Link
+                                    key={p.id}
+                                    to={`/publishers/${p.id}`}
+                                    className="text-slate-200 hover:text-primary-400 transition"
+                                >
+                                    {p.name}
+                                </Link>
+                            )).reduce((prev, curr) => [prev, ", ", curr])
+                        ) : "N/A"}
+                    </div>
                 </div>
 
                 <div className="rounded-2xl border border-primary-600/40 bg-gradient-to-br from-slate-800/50 to-teal-900/30 backdrop-blur p-6 shadow-lg shadow-primary-500/10">
                     <h2 className="text-xl font-bold text-primary-400">Plataformas</h2>
-                    <p className="mt-3 text-slate-200 leading-relaxed">
-                        {(juego.platforms || [])
-                            .map((p) => p.platform?.name)
-                            .filter(Boolean)
-                            .join(", ") || "N/A"}
-                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                        {(juego.platforms || []).length > 0 ? (
+                            juego.platforms.map((p) => (
+                                <span key={p.platform.id} className="text-slate-200">
+                                    {p.platform.name}
+                                </span>
+                            )).reduce((prev, curr) => [prev, ", ", curr])
+                        ) : "N/A"}
+                    </div>
+                </div>
+            </section>
+
+            <section className="rounded-2xl border border-primary-600/40 bg-gradient-to-br from-slate-800/50 to-teal-900/30 backdrop-blur p-6 shadow-lg shadow-primary-500/10">
+                <h2 className="text-xl font-bold text-primary-400">Etiquetas (Tags)</h2>
+                <div className="mt-3 flex flex-wrap gap-2">
+                    {(juego.tags || []).length > 0 ? (
+                        juego.tags.map((t) => (
+                            <Link
+                                key={t.id}
+                                to={`/juegos?tags=${t.id}`}
+                                className="rounded-full border border-primary-600/30 bg-primary-600/10 px-3 py-1 text-xs font-medium text-primary-300 hover:bg-primary-600/20 transition"
+                            >
+                                {t.name}
+                            </Link>
+                        ))
+                    ) : (
+                        <p className="text-slate-400 italic">No hay etiquetas disponibles</p>
+                    )}
                 </div>
             </section>
 

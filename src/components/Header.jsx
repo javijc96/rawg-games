@@ -2,10 +2,9 @@ import { Link, NavLink } from "react-router-dom";
 
 export default function Header() {
   const claseEnlace = ({ isActive }) =>
-    `px-4 py-2 rounded-lg text-sm font-bold transition duration-300 ${
-      isActive 
-        ? "bg-gradient-button text-white shadow-lg shadow-green-500/50" 
-        : "text-slate-100 hover:bg-primary-600/20 hover:text-primary-400"
+    `px-4 py-2 rounded-lg text-sm font-bold transition duration-300 ${isActive
+      ? "bg-gradient-button text-white shadow-lg shadow-green-500/50"
+      : "text-slate-100 hover:bg-primary-600/20 hover:text-primary-400"
     }`;
 
   return (
@@ -21,6 +20,9 @@ export default function Header() {
           </NavLink>
           <NavLink to="/juegos" className={claseEnlace}>
             Juegos
+          </NavLink>
+          <NavLink to="/publishers" className={claseEnlace}>
+            Distribuidoras
           </NavLink>
           <NavLink to="/favoritos" className={claseEnlace}>
             Favoritos

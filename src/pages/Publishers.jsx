@@ -1,22 +1,16 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { buscarJuegos, obtenerJuegosPorFiltro, obtenerJuegosPopulares } from "../services/rawg";
-import TarjetaJuego from "../components/TarjetaJuego";
+import { useSearchParams, Link } from "react-router-dom";
+import { obtenerPublishers } from "../services/rawg";
 import Paginacion from "../components/Paginacion";
 
-
-export default function Juegos() {
+export default function Publishers() {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // Filtros desde URL
     const textoQuery = searchParams.get("search") || "";
     const page = parseInt(searchParams.get("page") || "1", 10);
-    const genres = searchParams.get("genres") || "";
-    const tags = searchParams.get("tags") || "";
-    const publishers = searchParams.get("publishers") || "";
 
     const [textoInput, setTextoInput] = useState(textoQuery);
-    const [juegos, setJuegos] = useState([]);
+    const [publishers, setPublishers] = useState([]);
     const [cargando, setCargando] = useState(false);
     const [error, setError] = useState("");
 
@@ -27,19 +21,9 @@ export default function Juegos() {
             setCargando(true);
             setError("");
             try {
-                let data;
-                const params = { page, page_size: 12 };
-
-                if (textoQuery) {
-                    data = await buscarJuegos({ ...params, texto: textoQuery });
-                } else if (genres || tags || publishers) {
-                    data = await obtenerJuegosPorFiltro({ ...params, genres, tags, publishers });
-                } else {
-                    data = await obtenerJuegosPopulares(params);
-                }
-
+                const data = await obtenerPublishers({ texto: textoQuery, page, page_size: 12 });
                 if (!vivo) return;
-                setJuegos(data.results ?? []);
+                setPublishers(data.results ?? []);
             } catch (e) {
                 if (!vivo) return;
                 setError(e.message);
@@ -52,7 +36,7 @@ export default function Juegos() {
         return () => {
             vivo = false;
         };
-    }, [textoQuery, page, genres, tags, publishers]);
+    }, [textoQuery, page]);
 
     function onSearch(e) {
         e.preventDefault();
@@ -60,24 +44,22 @@ export default function Juegos() {
     }
 
     function onPageChange(newPage) {
-        const newParams = new URLSearchParams(searchParams);
-        newParams.set("page", newPage.toString());
-        setSearchParams(newParams);
+        setSearchParams({ search: textoQuery, page: newPage.toString() });
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     return (
         <div className="space-y-6">
             <header className="space-y-3">
-                <h1 className="text-4xl font-extrabold bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">Buscador de Juegos</h1>
-                <p className="text-base text-slate-300">Busca tus juegos favoritos por nombre y descubre nuevos títulos.</p>
+                <h1 className="text-4xl font-extrabold bg-gradient-to-r from-primary-400 to-cyan-400 bg-clip-text text-transparent">Buscador de Distribuidoras</h1>
+                <p className="text-base text-slate-300">Encuentra a los creadores de tus títulos favoritos.</p>
             </header>
 
             <form onSubmit={onSearch} className="flex gap-3 flex-col sm:flex-row">
                 <input
                     value={textoInput}
                     onChange={(e) => setTextoInput(e.target.value)}
-                    placeholder="Zelda, Pokemon, Elden Ring..."
+                    placeholder="Nintendo, Ubisoft, Sony..."
                     className="flex-1 rounded-xl border-2 border-primary-600/40 bg-slate-800/50 px-5 py-3 text-base outline-none placeholder:text-slate-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition"
                 />
                 <button
@@ -88,37 +70,38 @@ export default function Juegos() {
                 </button>
             </form>
 
-            {(genres || tags || publishers) && (
-                <div className="flex items-center gap-2 text-primary-400 font-semibold">
-                    <span>Filtrando por: </span>
-                    <button
-                        onClick={() => setSearchParams({ page: "1" })}
-                        className="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded hover:bg-red-500/30 transition"
-                    >
-                        Limpiar filtros ✕
-                    </button>
-                </div>
-            )}
-
-            {cargando ? <p className="text-center text-primary-400 font-semibold text-lg">Cargando juegos...</p> : null}
+            {cargando ? <p className="text-center text-primary-400 font-semibold text-lg">Cargando distribuidoras...</p> : null}
             {error ? <p className="text-center text-red-400 font-semibold text-lg">{error}</p> : null}
 
-            {!cargando && !error && juegos.length === 0 ? (
+            {!cargando && !error && publishers.length === 0 ? (
                 <div className="rounded-2xl border-2 border-primary-600/30 bg-gradient-to-r from-slate-800/50 to-teal-900/30 p-8 text-center">
-                    <p className="text-slate-300 text-lg">No se encontraron juegos.</p>
+                    <p className="text-slate-300 text-lg">No se encontraron distribuidoras.</p>
                 </div>
             ) : null}
 
             <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {juegos.map((j) => (
-                    <TarjetaJuego key={j.id} juego={j} />
+                {publishers.map((p) => (
+                    <Link
+                        key={p.id}
+                        to={`/publishers/${p.id}`}
+                        className="group flex flex-col items-center gap-4 rounded-3xl border border-primary-600/30 bg-gradient-to-br from-slate-800/50 to-teal-900/30 p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:border-primary-500 hover:shadow-primary-500/20"
+                    >
+                        {p.image_background && (
+                            <img
+                                src={p.image_background}
+                                alt={p.name}
+                                className="h-32 w-full rounded-2xl object-cover opacity-80 group-hover:opacity-100 transition"
+                            />
+                        )}
+                        <h2 className="text-xl font-bold text-slate-100 group-hover:text-primary-400 transition">{p.name}</h2>
+                        <span className="text-sm text-slate-400">{p.games_count} juegos</span>
+                    </Link>
                 ))}
             </section>
 
-            {!cargando && juegos.length > 0 && (
+            {!cargando && publishers.length > 0 && (
                 <Paginacion current={page} onPageChange={onPageChange} />
             )}
-
         </div>
     );
 }

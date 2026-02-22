@@ -3,6 +3,8 @@ import Home from "./pages/Home";
 import Juegos from "./pages/Juegos";
 import DetallesJuego from "./pages/DetallesJuego";
 import Favoritos from "./pages/Favoritos";
+import Publishers from "./pages/Publishers";
+import DetallePublisher from "./pages/DetallePublisher";
 import NoEncontrado from "./pages/NoEncontrado";
 
 import Header from "./components/Header";
@@ -20,6 +22,8 @@ export default function App() {
             <Route path="/juegos" element={<Juegos />} />
             <Route path="/juegos/:id" element={<DetallesJuego />} />
             <Route path="/favoritos" element={<Favoritos />} />
+            <Route path="/publishers" element={<Publishers />} />
+            <Route path="/publishers/:id" element={<DetallePublisher />} />
             <Route path="*" element={<NoEncontrado />} />
           </Routes>
         </div>

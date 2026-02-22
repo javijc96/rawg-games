@@ -1,4 +1,32 @@
-const BASE_URL = import.meta.env.DEV
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: services/rawg.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: services/rawg.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const BASE_URL = import.meta.env.DEV
     ? "/api"
     : "https://api.rawg.io/api";
 
@@ -7,7 +35,7 @@ const KEY = import.meta.env.VITE_RAWG_KEY;
 /**
  * Delays the execution for a given number of milliseconds.
  * @param {number} ms - The number of milliseconds to sleep.
- * @returns {Promise<void>}
+ * @returns {Promise&lt;void>}
  */
 function sleep(ms) {
     return new Promise((r) => setTimeout(r, ms));
@@ -34,7 +62,7 @@ function mensajeBonitoPorStatus(status) {
  * 
  * @param {string} path - The API endpoint path (e.g., "/games").
  * @param {Object} [params={}] - Query parameters for the request.
- * @returns {Promise<Object>} The parsed JSON response from the API.
+ * @returns {Promise&lt;Object>} The parsed JSON response from the API.
  * @throws {Error} If the API key is missing or the request fails.
  */
 async function request(path, params = {}) {
@@ -44,12 +72,12 @@ async function request(path, params = {}) {
     url.searchParams.set("key", KEY);
 
     for (const [k, v] of Object.entries(params)) {
-        if (v !== undefined && v !== null && v !== "") url.searchParams.set(k, v);
+        if (v !== undefined &amp;&amp; v !== null &amp;&amp; v !== "") url.searchParams.set(k, v);
     }
 
     const MAX_INTENTOS = 2;
 
-    for (let intento = 1; intento <= MAX_INTENTOS; intento++) {
+    for (let intento = 1; intento &lt;= MAX_INTENTOS; intento++) {
         try {
             const res = await fetch(url.toString(), {
                 method: "GET",
@@ -69,7 +97,7 @@ async function request(path, params = {}) {
                 }
 
                 const esTemporal = [502, 503, 504].includes(res.status);
-                if (esTemporal && intento < MAX_INTENTOS) {
+                if (esTemporal &amp;&amp; intento &lt; MAX_INTENTOS) {
                     await sleep(800);
                     continue;
                 }
@@ -97,18 +125,17 @@ async function request(path, params = {}) {
  * @param {Object} options - Search options.
  * @param {string} [options.texto=""] - The text to search for.
  * @param {number} [options.page_size=12] - Number of results per page.
- * @param {number} [options.page=1] - Page number.
- * @returns {Promise<Object>} API response with game list.
+ * @returns {Promise&lt;Object>} API response with game list.
  */
-export function buscarJuegos({ texto = "", page_size = 12, page = 1 } = {}) {
-    return request("/games", { search: texto, page_size, page });
+export function buscarJuegos({ texto = "", page_size = 12 } = {}) {
+    return request("/games", { search: texto, page_size });
 }
 
 /**
  * Retrieves detailed information for a specific game.
  * 
  * @param {number|string} id - The RAWG game ID.
- * @returns {Promise<Object>} API response with game details.
+ * @returns {Promise&lt;Object>} API response with game details.
  */
 export function obtenerDetalleJuego(id) {
     return request(`/games/${id}`);
@@ -119,53 +146,31 @@ export function obtenerDetalleJuego(id) {
  * 
  * @param {Object} options - Filtering options.
  * @param {number} [options.page_size=12] - Number of results per page.
- * @param {number} [options.page=1] - Page number.
- * @returns {Promise<Object>} API response with popular games.
+ * @returns {Promise&lt;Object>} API response with popular games.
  */
-export function obtenerJuegosPopulares({ page_size = 12, page = 1 } = {}) {
-    return request("/games", { ordering: "-rating", page_size, page });
+export function obtenerJuegosPopulares({ page_size = 12 } = {}) {
+    return request("/games", { ordering: "-rating", page_size });
 }
+</code></pre>
+        </article>
+    </section>
 
-/**
- * Searches for publishers based on text input.
- * 
- * @param {Object} options - Search options.
- * @param {string} [options.texto=""] - The text to search for.
- * @param {number} [options.page_size=12] - Number of results per page.
- * @param {number} [options.page=1] - Page number.
- * @returns {Promise<Object>} API response with publisher list.
- */
-export function obtenerPublishers({ texto = "", page_size = 12, page = 1 } = {}) {
-    return request("/publishers", { search: texto, page_size, page });
-}
 
-/**
- * Retrieves detailed information for a specific publisher.
- * 
- * @param {number|string} id - The RAWG publisher ID.
- * @returns {Promise<Object>} API response with publisher details.
- */
-export function obtenerDetallePublisher(id) {
-    return request(`/publishers/${id}`);
-}
 
-/**
- * Retrieves games filtered by various criteria.
- * 
- * @param {Object} options - Filtering options.
- * @param {string} [options.genres] - Genre IDs (comma separated).
- * @param {string} [options.tags] - Tag IDs (comma separated).
- * @param {string} [options.publishers] - Publisher IDs (comma separated).
- * @param {number} [options.page_size=12] - Number of results per page.
- * @param {number} [options.page=1] - Page number.
- * @returns {Promise<Object>} API response with filtered game list.
- */
-export function obtenerJuegosPorFiltro({ genres, tags, publishers, page_size = 12, page = 1 } = {}) {
-    return request("/games", {
-        genres,
-        tags,
-        publishers,
-        page_size,
-        page
-    });
-}
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#buscarJuegos">buscarJuegos</a></li><li><a href="global.html#mensajeBonitoPorStatus">mensajeBonitoPorStatus</a></li><li><a href="global.html#obtenerDetalleJuego">obtenerDetalleJuego</a></li><li><a href="global.html#obtenerJuegosPopulares">obtenerJuegosPopulares</a></li><li><a href="global.html#request">request</a></li><li><a href="global.html#sleep">sleep</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Feb 22 2026 13:14:59 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
